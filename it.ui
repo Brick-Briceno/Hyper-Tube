@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>503</width>
+    <height>409</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Hyper Tube</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/*Symmetry Melody 2*/
+/* Estilo para todos los elementos */
+
+* {
+	background-image: url(:/fondo/noise.png);
+    color: white;
+
+}
+
+QTabBar::tab {
+	background-image: url(:/fondo/noise.png);
+    color: white;
+    font-size: 15px;
+	width: 180px;
+    height: 25px;
+	border-radius: 8px;
+}
+
+/* Estilo para el encabezado de la tabla */
+QHeaderView::section {
+    background-color: black;
+    color: white;
+}
+
+/* Estilo para QLineEdit y QPushButton */
+
+QLineEdit, QPushButton {
+	font: 11pt;
+    border: 1px solid gray;
+    border-radius: 7px;
+	background-image: url(:/fondo/noise.png);
+}
+
+/* Estilo para QLineEdit cuando el mouse está sobre él */
+QLineEdit:hover {
+    border: 2px solid white;
+	background-image: url(:/fondo/noise.png);
+}
+
+/* Estilo para QLineEdit cuando pierde el foco */
+QLineEdit:focus {
+    border: 2px solid gray;
+	background-image: url(:/fondo/noise.png);
+}
+
+/* Estilo para QFrame */
+QFrame {
+    border-radius: 3px;
+	background-image: url(:/fondo/noise.png);
+}
+
+/* Estilo para QSlider */
+
+QSlider {
+	background-image: url(:/fondo/noise.png);
+}
+
+QSlider::groove:horizontal {
+    border: 1px;
+    background: #bbb;
+    height: 10px;
+    border-radius: 5px;
+}
+
+QSlider::handle:horizontal {
+    background: #777;
+    width: 15px;
+    margin-top: -2px;
+    margin-bottom: -2px;
+    border-radius: 7px;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>57</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="descargar">
+         <property name="text">
+          <string>Descargar</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="play_pause">
+         <property name="text">
+          <string>Play</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="url">
+         <property name="placeholderText">
+          <string>Pega una url</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_3">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QTableWidget" name="lista">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="sortingEnabled">
+          <bool>false</bool>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <row>
+          <property name="text">
+           <string>hi</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>hi</string>
+          </property>
+         </column>
+         <item row="0" column="0">
+          <property name="text">
+           <string>Video de prueba</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="minimumSize">
+          <size>
+           <width>107</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Info</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QTextEdit" name="info">
+               <property name="html">
+                <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nombre: &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Peso: &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;bajado:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600; color:#00ff00;&quot;&gt;Listo!&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-weight:600;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>140</height>
+             </size>
+            </property>
+            <property name="title">
+             <string>Configuración</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QRadioButton" name="indices">
+               <property name="text">
+                <string>Nombres 1, 2, 3 en listas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="ver_reso">
+               <property name="text">
+                <string>Resolución: 720p</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="ajustar_reso">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>10</number>
+               </property>
+               <property name="singleStep">
+                <number>7</number>
+               </property>
+               <property name="sliderPosition">
+                <number>7</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="invertedControls">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionAbrir_Proyecto">
+   <property name="text">
+    <string>Abrir Proyecto</string>
+   </property>
+  </action>
+  <action name="actionGuardar_como">
+   <property name="text">
+    <string>Guardar como</string>
+   </property>
+  </action>
+  <action name="actionGuardar">
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+  </action>
+  <action name="actionExportar_mid">
+   <property name="text">
+    <string>Exportar .mid</string>
+   </property>
+  </action>
+  <action name="actionSalir">
+   <property name="text">
+    <string>Exportar Mp3</string>
+   </property>
+  </action>
+  <action name="actionBuscador_de_ritmas">
+   <property name="text">
+    <string>Buscador de ritmas</string>
+   </property>
+  </action>
+  <action name="actionFuerza_burta_euclideana">
+   <property name="text">
+    <string>3 in 4 (tresillo corto)</string>
+   </property>
+  </action>
+  <action name="actionTutorial">
+   <property name="text">
+    <string>Tutorial</string>
+   </property>
+  </action>
+  <action name="actionDame_un_caf">
+   <property name="text">
+    <string>Dame un café &lt;3</string>
+   </property>
+  </action>
+  <action name="actionAcerca_de">
+   <property name="text">
+    <string>Acerca de</string>
+   </property>
+  </action>
+  <action name="actionSobre_el_Proyecto">
+   <property name="text">
+    <string>Sobre el Proyecto</string>
+   </property>
+  </action>
+  <action name="action_sostenido">
+   <property name="text">
+    <string># (sostenido)</string>
+   </property>
+  </action>
+  <action name="actionb_bemol">
+   <property name="text">
+    <string>♭ (bemol)</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>𝅘𝅥𝅮 (tresillo coto)</string>
+   </property>
+  </action>
+  <action name="action_tresillo_largo">
+   <property name="text">
+    <string>𝅘𝅥 (tresillo largo)</string>
+   </property>
+  </action>
+  <action name="action4_in_1_sonido_RRR">
+   <property name="text">
+    <string>4 in 1 (sonido RRR)</string>
+   </property>
+  </action>
+  <action name="action8_in_1_sonido_rrr">
+   <property name="text">
+    <string>8 in 1 (sonido rrr)</string>
+   </property>
+  </action>
+  <action name="actionFuerza_Bruta_Euclideana_Brick">
+   <property name="text">
+    <string>Silencio (todo deja de sonar)</string>
+   </property>
+  </action>
+  <action name="actionFuerza_Bruta_Euclideana_Brick_2">
+   <property name="text">
+    <string>Fuerza Bruta Euclideana Brick</string>
+   </property>
+  </action>
+  <action name="actionHarmonia_negativa">
+   <property name="text">
+    <string>Harmonia negativa</string>
+   </property>
+  </action>
+  <action name="actionQuitar_numeros">
+   <property name="text">
+    <string>Quitar numeros</string>
+   </property>
+  </action>
+  <action name="actionSeparar_en_silabras">
+   <property name="text">
+    <string>Separar en silabras</string>
+   </property>
+  </action>
+  <action name="actionCopiar_Letra">
+   <property name="text">
+    <string>Copiar Letra</string>
+   </property>
+  </action>
+  <action name="actionConfiguraci_n_2">
+   <property name="text">
+    <string>Configuración</string>
+   </property>
+  </action>
+  <action name="actionJonico_mayor">
+   <property name="text">
+    <string>Jonico/Mayor 🌻</string>
+   </property>
+  </action>
+  <action name="actionEolico_Menor">
+   <property name="text">
+    <string>Eolico/Menor 🌧</string>
+   </property>
+  </action>
+  <action name="actionMenor_Harmonica">
+   <property name="text">
+    <string>Menor Harmonica</string>
+   </property>
+  </action>
+  <action name="actionFrigio">
+   <property name="text">
+    <string>Frigio</string>
+   </property>
+  </action>
+  <action name="actionDorico">
+   <property name="text">
+    <string>Dorico</string>
+   </property>
+  </action>
+  <action name="actionMixolidio">
+   <property name="text">
+    <string>Mixolidio</string>
+   </property>
+  </action>
+  <action name="actionArabe">
+   <property name="text">
+    <string>Arabe</string>
+   </property>
+  </action>
+  <action name="actionLocrio">
+   <property name="text">
+    <string>Locrio</string>
+   </property>
+  </action>
+  <action name="actionHungara">
+   <property name="text">
+    <string>Hungara</string>
+   </property>
+  </action>
+  <action name="actionLidio">
+   <property name="text">
+    <string>Lidio</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="it.qrc"/>
+ </resources>
+ <connections/>
+</ui>
