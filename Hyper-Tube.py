@@ -66,13 +66,17 @@ class hp:
 
     def anadir():
         link = ventana.buscador.displayText()
-        try: _id = link
+        ident = None
+        try: ident = YouTube(link).video_id
         except ht.exceptions.RegexMatchError:
             ventana.statusbar.showMessage(f"Enlace no valido {link}")
-        cf["video list"]["Name"].append(f"Cargando datos de video: {_id}")
-        cf["video list"]["ID"].append(_id)
+            return
+        cf["video list"]["Name"].append(f"Cargando datos de video: {ident}")
+        cf["video list"]["ID"].append(ident)
         cf["video list"]["Data"].append(False)
         hp.actualizar_lista()
+        cf.guardar()
+        ventana.statusbar.showMessage(f"Video añadido")
 
     def indices():
         cf["list count"] = not ventana.indices.isChecked()
@@ -101,9 +105,12 @@ class hp:
                 cf["video list"]["ID"],
                 cf["video list"]["Data"]):
                 if not is_data:
-                    try: cf["video list"]["Name"] = YouTube(
+                    n = cf["video list"]["ID"].index(_id)
+                    try:
+                        cf["video list"]["Name"][n] = YouTube(
                         f"https://www.youtube.com/watch?v={_id})").title
-                    except: ...
+                        hp.actualizar_lista()
+                    except: print("Error")
                 time.sleep(1)
 
 
@@ -148,6 +155,7 @@ ventana.show()
 "Funciones de inicio"
 hp.inicio()
 Thread(target=hp.motor_descargas).start()
+Thread(target=hp.nombres_listas).start()
 
 app.exec_()#iniciar
 hp.motor_vivo = False
