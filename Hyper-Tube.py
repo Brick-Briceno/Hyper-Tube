@@ -3,118 +3,142 @@ Hyper Tube v1.1
 @Brick_briceno 2024
 """
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QShortcut, QMessageBox, QHeaderView
-from pytube import YouTube, Playlist
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import QUrl, Qt
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QMessageBox,
+QTableWidgetItem, QShortcut, QApplication, QMainWindow)
+from youtube_transcript_api import YouTubeTranscriptApi
+from pytube import YouTube, Playlist, exceptions
+from PyQt5.QtGui import QKeySequence, QColor
 from it_ui import Ui_MainWindow
+from threading import Thread
+import Api_hyper as ht
+from config import cf
+import requests
+import random
 import time
-import re
 import os
+import re
 
 
-class DL:
-    def descargar_video(url, nombre, ruta, resolucion):
-        video = YouTube(url)
+class hp:
+    #variables
+    celda_selecionada = None
+    "administrar widgets"
+    def cambiar_color_texto_celda(
+            tabla, fila,
+            columna, texto="",
+            color=QColor.fromHslF(0, 0, 0, 0)):
+        item = QTableWidgetItem()
+        tabla.setItem(fila, columna, item)
+        item.setText(texto)
+        item.setBackground(QColor(color))
 
-        # Filtra las corrientes por resolución
-        if resolucion.lower() == "max":
-            chosen_stream = video.streams.get_highest_resolution()
-        else:
-            filtered_streams = video.streams.filter(res=resolucion, file_extension="mp4")
-            chosen_stream = filtered_streams.first()
+    def cantidad_celdas(tabla, filas=1, columnas=1):
+        tabla.setRowCount(filas)
+        tabla.setColumnCount(columnas)
 
-        # Descarga el video en la ubicación especificada
-        chosen_stream.download(output_path=ruta, filename=nombre)
-
-    def es_url_lista_reproduccion(url):
-        try:
-            playlist = Playlist(url)
-            playlist._video_regex = re.compile(r"\"url\":\"(/watch\?v=[\w-]*)")
-            return playlist.title, playlist
-        except: return ["", [url]]
-
-    def limpiar(txt):
-        final = ""
-        for x in txt:
-            if x.upper() in " 0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ": final += x
-        return final
-
-    on = True
-    lista = [
-        #aquí estarán listas con indices:
-        #[URL, Nombre, nombre_lista]
-    ]
-    conf = {"resolucion": "max",
-            "indices": True,
-            "ruta": "%USERPROFILE%/Videos/YT"
-            }
+    def actualizar_lista():
+        hp.cantidad_celdas(ventana.lista, len(cf["video list"]["Name"]))
+        for i, name in enumerate(cf["video list"]["Name"]):
+            hp.cambiar_color_texto_celda(ventana.lista, i, 0, name)
     
-    def agregar(url):
-        DL.conf["indices"] = ventana.indices.isChecked()
-        print(DL.conf["indices"])
+    "control de sistema"
+    
+    def inicio():
+        hp.actualizar_lista()
 
-        nueva_lista = []
-        nombre_lista, lista = DL.es_url_lista_reproduccion(url)
-        for video in lista:
-            nueva_lista.append([video, ])        
-        
+    def set_calidad(v):
+        cf["resolution"] = ht.calidades[::-1][v]
+        ventana.reso.setText(f"Resolución: {cf["resolution"]}")
+        cf.guardar()
 
-    def descargar():
-        indice = 0
-        intentos = 3
-        while DL.on:
-            url, titulo, nombre_lista = DL.lista[indice]
-            try:
-                DL.descargar(url, titulo,
-                            DL.limpiar(DL.conf["ruta"].strip("\\")+nombre_lista),
-                            DL.conf["resolucion"])
-                DL.lista.pop(0)
-                indice += 1
-            except:
-                print("ha ocurrido un error")
-                if not intentos:
-                    intentos -= 1
-                    print(f"intentos restantes {intentos}")
-                    continue
-                else:
-                    DL.lista.pop(0)
-                    indice += 1
+    def eliminar():
+        if hp.celda_selecionada == None:
+            ventana.statusbar.showMessage("Selecione un video para Eliminarlo!")
+        else:
+            name = cf["video list"]["Name"][hp.celda_selecionada]
+            cf["video list"]["Name"].pop(hp.celda_selecionada)
+            cf["video list"]["ID"].pop(hp.celda_selecionada)
+            cf["video list"]["Data"].pop(hp.celda_selecionada)
+            cf.guardar()
+            hp.celda_selecionada = None
+            hp.actualizar_lista()
+            ventana.statusbar.showMessage(f"Se ha eliminado {name}")
+
+    def anadir():
+        link = ventana.buscador.displayText()
+        try: _id = link
+        except ht.exceptions.RegexMatchError:
+            ventana.statusbar.showMessage(f"Enlace no valido {link}")
+        cf["video list"]["Name"].append(f"Cargando datos de video: {_id}")
+        cf["video list"]["ID"].append(_id)
+        cf["video list"]["Data"].append(False)
+        hp.actualizar_lista()
+
+    def indices():
+        cf["list count"] = not ventana.indices.isChecked()
+        cf.guardar()
+    
+    def seleccionar(l, c): hp.celda_selecionada = l
+
+    "motor de descargas"
+
+    motor_vivo = True
+    def motor_descargas():
+        while hp.motor_vivo:
+            for _id in cf["video list"]["ID"]:
+                try:
+                    #iniciar descarga
+                    video = ht.video_yt(_id)
+                    #verificar si es lista de reproducción
+                    video.descargar()
+                    #descarga completada
+                except: time.sleep(random.randint(1, 50**4)/1000)
+
+    def nombres_listas():
+        while hp.motor_vivo:
+            #obtener nombres de videos
+            for _id, is_data in zip(
+                cf["video list"]["ID"],
+                cf["video list"]["Data"]):
+                if not is_data:
+                    try: cf["video list"]["Name"] = YouTube(
+                        f"https://www.youtube.com/watch?v={_id})").title
+                    except: ...
+                time.sleep(1)
 
 
 class MiVentana(QMainWindow, Ui_MainWindow):
-    valor = False
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowOpacity(0.97)
         self.showMaximized()
+        self.valor = False
 
         def pantalla_completa():
-            if ventana.valor: self.showMaximized()
+            if self.valor: self.showMaximized()
             else: self.showFullScreen()
-            ventana.valor = not ventana.valor
+            self.valor = not ventana.valor
 
         "Botones"
         #self.descargar.clicked.connect()
         #self.play_pause.clicked.connect()
 
         "Sliders"
-        #self.ajustar_reso.valueChanged.connect()
-        #radioButton.isChecked()
+        self.ajustar_resol.valueChanged.connect(hp.set_calidad)
+        "Radio button"
+        self.indices.pressed.connect(hp.indices)
 
         "Line Edits"
-        #self.buscador.returnPressed.connect()
+        self.buscador.returnPressed.connect(hp.anadir)
         #self.buscador.setPlaceholderText("")
 
         "Tablas"
-        #self.tabla_contactos.cellClicked.connect()
-        #self.tabla_contactos_2.cellClicked.connect()
-        #self.tabla_contactos_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.lista.cellClicked.connect(hp.seleccionar)
 
         "Atajos"
         QShortcut(QKeySequence("F11"), self, pantalla_completa)
-        QShortcut(QKeySequence("Ctrl+D"), self, pantalla_completa)
+        QShortcut(QKeySequence("Ctrl+D"), self, hp.eliminar)
 
 
 app = QApplication([])
@@ -122,9 +146,10 @@ ventana = MiVentana()
 ventana.show()
 
 "Funciones de inicio"
+hp.inicio()
+Thread(target=hp.motor_descargas).start()
 
 app.exec_()#iniciar
+hp.motor_vivo = False
 
 "Funciones de salida"
-
-DL.on = False
