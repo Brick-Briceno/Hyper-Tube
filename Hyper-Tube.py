@@ -48,7 +48,9 @@ class hp:
 
     def set_calidad(v):
         cf["resolution"] = ht.calidades[::-1][v]
-        ventana.reso.setText(f"Resolución: {cf["resolution"]}")
+        r = cf["resolution"]
+        if r == "audio": ventana.reso.setText(f"Descargar solo audio")
+        else: ventana.reso.setText(f"Resolución: {r}")
         cf.guardar()
 
     def eliminar():
@@ -64,10 +66,19 @@ class hp:
             hp.actualizar_lista()
             ventana.statusbar.showMessage(f"Se ha eliminado {name}")
 
-    def anadir():
-        link = ventana.buscador.displayText()
+    def anadir(link=None, is_list=True):
+        if not link: link = ventana.buscador.displayText()
+        #si es una lista de reproducción
+        if is_list:
+            lista = ht.es_url_lista_reproduccion(link)
+            if lista:
+                for v_link in lista[1]: hp.anadir(v_link, is_list=False)
+                return
+        #si es un video común
         ident = None
-        try: ident = YouTube(link).video_id
+        try:
+            video = YouTube(link)
+            ident = video.video_id
         except ht.exceptions.RegexMatchError:
             ventana.statusbar.showMessage(f"Enlace no valido {link}")
             return
@@ -89,14 +100,23 @@ class hp:
     motor_vivo = True
     def motor_descargas():
         while hp.motor_vivo:
-            for _id in cf["video list"]["ID"]:
-                try:
-                    #iniciar descarga
-                    video = ht.video_yt(_id)
-                    #verificar si es lista de reproducción
-                    video.descargar()
-                    #descarga completada
-                except: time.sleep(random.randint(1, 50**4)/1000)
+            #verificar que haya algo en la lista
+            if len(cf["video list"]["Data"]) == 0:
+                time.sleep(1)
+                continue
+            #extraer datos en variables
+            cf["video list"]["Data"][0]
+            _id = cf["video list"]["name"][0]
+            _id = cf["video list"]["ID"][0]
+            try: #iniciar descarga
+                video = ht.video_yt(_id)
+                #verificar si es lista de reproducción
+                link_video = ...
+                video.descargar()
+                #descarga completada
+                for v in ["video list"].keys(): ["video list"][v].pop()
+                ventana.statusbar.showMessage(f"Video descargado con exito! ")
+            except: time.sleep(random.randint(1, 50**4)/1000)
 
     def nombres_listas():
         while hp.motor_vivo:
@@ -109,6 +129,7 @@ class hp:
                     try:
                         cf["video list"]["Name"][n] = YouTube(
                         f"https://www.youtube.com/watch?v={_id})").title
+                        cf["video list"]["Data"][n] = True
                         hp.actualizar_lista()
                     except: print("Error")
                 time.sleep(1)
